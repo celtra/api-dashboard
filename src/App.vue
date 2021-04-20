@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <Creatives />
-    <p>{{ userId }}</p>
-    <p>{{ secretKey }}</p>
-    <p>{{ apiUrl }}</p>
   </div>
 </template>
 
@@ -17,7 +14,7 @@ export default {
   },
   data() {
     return {
-      userId: process.env.VUE_APP_CELTRA_USER_ID,
+      appId: process.env.VUE_APP_CELTRA_APP_ID,
       secretKey: process.env.VUE_APP_CELTRA_SECRET_KEY,
       apiUrl: process.env.VUE_APP_CELTRA_URL
     }

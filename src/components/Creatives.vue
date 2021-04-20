@@ -1,17 +1,24 @@
 <template>
   <div class="hello">
     <div v-for="creative in getCreatives" v-bind:key="creative.id">
-      {{ creative.title }}
+      Name: {{ creative.name }}
+      FolderId: {{ creative.folderId }}
     </div>
   </div>
 </template>
 
 <script>
-import  { mapGetters } from 'vuex';
+import  { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Creatives',
-  computed: mapGetters(['getCreatives'])
+  methods: {
+    ...mapActions(['fetchCreatives'])
+  },
+  computed: mapGetters(['getCreatives']),
+  created() {
+    this.fetchCreatives();
+  }
 }
 </script>
 

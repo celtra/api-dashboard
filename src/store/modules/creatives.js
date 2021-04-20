@@ -1,18 +1,21 @@
-//import axios from 'axios';
+import axios from "axios";
 
 const state = {
     creatives: [
         {
             id: 1,
-            title: "Creative one"
+            name: "Creative one",
+            folderId: 'Test'
         },
         {
             id: 2,
-            title: "Creative two"
+            name: "Creative two",
+            folderId: 'Test'
         },
         {
             id: 3,
-            title: "Creative three"
+            name: "Creative three",
+            folderId: 'Test'
         },
     ]
 };
@@ -21,9 +24,31 @@ const getters = {
     getCreatives: state => state.creatives
 };
 
-const actions = {};
+const actions = {
+    async fetchCreatives({ commit }) {
+        const URL = "/creatives";
+        var username = process.env.VUE_APP_CELTRA_APP_ID;
+        var password = process.env.VUE_APP_CELTRA_SECRET_KEY;
+        var basicAuth = 'Basic ' + btoa(username + ':' + password);
+        var config = {
+            headers: {
+                'Authorization': basicAuth,
+            },
+            params: {
+                'accountId': '01feb88d',
+                'folderClazz': 'Template',
+            }
+        };
+        const response = await axios.get(URL, config);
 
-const mutations = {};
+        console.log('Creatives', response.data);
+        commit('setCreatives', response.data);
+    }
+};
+
+const mutations = {
+    setCreatives: (state, creatives) => state.creatives = creatives
+};
 
 export default {
     state,
