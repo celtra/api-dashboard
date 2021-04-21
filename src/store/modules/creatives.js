@@ -2,21 +2,26 @@ import axios from "axios";
 
 const state = {
     creatives: [
+        /*
         {
             id: 1,
             name: "Creative one",
-            folderId: 'Test'
+            folderId: 'Test',
+            clazz: 'Test banner'
         },
         {
             id: 2,
             name: "Creative two",
-            folderId: 'Test'
+            folderId: 'Test',
+            clazz: 'Test banner'
         },
         {
             id: 3,
             name: "Creative three",
-            folderId: 'Test'
+            folderId: 'Test',
+            clazz: 'Test banner'
         },
+        */
     ]
 };
 
@@ -27,9 +32,11 @@ const getters = {
 const actions = {
     async fetchCreatives({ commit }) {
         const URL = "/creatives";
+
         var username = process.env.VUE_APP_CELTRA_APP_ID;
         var password = process.env.VUE_APP_CELTRA_SECRET_KEY;
         var basicAuth = 'Basic ' + btoa(username + ':' + password);
+
         var config = {
             headers: {
                 'Authorization': basicAuth,

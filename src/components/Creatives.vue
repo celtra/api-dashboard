@@ -1,8 +1,17 @@
 <template>
   <div class="hello">
-    <div v-for="creative in getCreatives" v-bind:key="creative.id">
-      Name: {{ creative.name }}
-      FolderId: {{ creative.folderId }}
+    <div class="creative" v-for="creative in getCreatives" v-bind:key="creative.id">
+      <div class="creative-image">
+        <img class="creative-alt" alt="Logo" src="../assets/creative.png">
+      </div>
+      <div>
+          <div class="creative-name">
+            {{ creative.name }}
+          </div>
+          <div class="creative-clazz">
+            {{ creative.clazz }}
+          </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,18 +33,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h3 {
-    margin: 40px 0 0;
+  .creative {
+    color: white;
+    margin-top: 30px;
   }
-  ul {
-    list-style-type: none;
-    padding: 0;
+
+  .creative-image {
+    width: 255px;
+    height: 255px;
+    border: 1px solid;
+    margin: auto;
   }
-  li {
-    display: inline-block;
-    margin: 0 10px;
+
+  .creative-name {
+    margin: 10px;
   }
-  a {
-    color: #0d1411;
+
+  .creative-alt {
+    margin-top: 110px;
   }
 </style>
