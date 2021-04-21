@@ -31,7 +31,7 @@ const getters = {
 
 const actions = {
     async fetchCreatives({ commit }) {
-        const URL = "/creatives";
+        const URL = process.env.VUE_APP_CELTRA_URL + "/creatives";
 
         var username = process.env.VUE_APP_CELTRA_APP_ID;
         var password = process.env.VUE_APP_CELTRA_SECRET_KEY;
