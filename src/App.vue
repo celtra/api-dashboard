@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <h2>Ad products</h2>
+    <div class="header-title">
+      <h2>Ad products<img class="creative-alt" alt="Logo" src="./assets/celtra-logo.png"></h2>
+    </div>
     <Creatives />
   </div>
 </template>
@@ -31,6 +33,11 @@ export default {
     min-height: 100%;
      background-color: #000014;
   }
+  
+  .header-title {
+    margin-bottom: 80px;
+  }
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -43,5 +50,11 @@ export default {
   h2 {
     color: white;
     font-family: Avenir, Helvetica, Arial, sans-serif;
+  }
+
+  .creative-alt {
+    margin-left: 10px;
+    width: 50px;
+    height: auto;
   }
 </style>

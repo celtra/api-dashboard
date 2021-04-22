@@ -1,16 +1,22 @@
 <template>
-  <div class="hello">
-    <div class="creative" v-for="creative in getCreatives" v-bind:key="creative.id">
-      <div class="creative-image">
-        <img class="creative-alt" alt="Logo" src="../assets/creative.png">
-      </div>
-      <div>
-          <div class="creative-name">
-            {{ creative.name }}
+  <div>
+    <div class="creative" v-for="folder in getCreatives" v-bind:key="folder.folderId">
+      <div class="folder-name">{{ folder.folderName }}</div>
+      <hr>
+      <div class="creative-list">
+        <div class="creative" v-for="creative in folder.creatives" v-bind:key="creative.id">
+          <div class="creative-image">
+            <img class="creative-alt" alt="Logo" src="../assets/creative.png">
           </div>
-          <div class="creative-clazz">
-            {{ creative.clazz }}
+          <div>
+              <div class="creative-name">
+                {{ creative.name }}
+              </div>
+              <div class="creative-clazz">
+                {{ creative.clazz }}
+              </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,14 +39,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .folder-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .creative-list {
+    display: flex;
+    justify-content: center;
+  }
+
   .creative {
     color: white;
     margin-top: 30px;
   }
 
   .creative-image {
-    width: 255px;
-    height: 255px;
+    width: 100px;
+    height: 100px;
     border: 1px solid;
     margin: auto;
   }
@@ -50,6 +66,6 @@ export default {
   }
 
   .creative-alt {
-    margin-top: 110px;
+    margin: 25px 0 0 0;
   }
 </style>
