@@ -42,7 +42,7 @@ const state = {
         */
 
     ],
-    accountId: '01feb88d',
+    accountId: null,
     authToken: 'Basic ' + btoa(process.env.VUE_APP_CELTRA_APP_ID + ':' + process.env.VUE_APP_CELTRA_SECRET_KEY),
 };
 
@@ -52,20 +52,31 @@ const getters = {
 
 const actions = {
     async fetchAccountId({ commit }) {
-        const URL = process.env.VUE_APP_CELTRA_URL + "/accounts";
+        const me = await axios.get(process.env.VUE_APP_CELTRA_URL + "/me", {
+            headers: {
+                'Authorization': state.authToken,
+            },
+            params: {
+                'fields': 'id',
+            }
+        });
+        const ownerId = me.data.id;
 
         var config = {
             headers: {
                 'Authorization': state.authToken,
             },
             params: {
-                'userId': 'me',
+                'userId': ownerId,
+                'identifier': 'test3',
+                'fields': 'id'
             }
         };
-        const response = await axios.get(URL, config);
+        const accountResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/accounts", config);
+        const accountId = accountResponse.data[0].id;
 
-        console.log('AccountId', response.data);
-        commit('setAccountId', response.data.id);
+        console.log('AccountId', accountId);
+        commit('setAccountId', accountId);
     },
 
     async fetchFolders({ commit }) {
@@ -89,11 +100,10 @@ const actions = {
     },
 
     async fetchCreatives({ commit, dispatch }) {
-        /*
         if (state.accountId == null) {
             await dispatch('fetchAccountId');
         }
-        */
+
         const headers = {
             'Authorization': state.authToken,
         }
