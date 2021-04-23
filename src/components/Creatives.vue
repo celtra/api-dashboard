@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="creative" v-for="folder in getCreatives" v-bind:key="folder.folderId">
+    <div class="folder" v-for="folder in getCreatives" v-bind:key="folder.folderId">
       <hr>
       <div class="folder-name">{{ folder.folderName }}</div>
       <hr>
       <div class="creative-list">
-        <div class="creative" v-for="creative in folder.creatives" v-bind:key="creative.id">
+        <div class="creative"  v-on:click="goToCreative(creative.id)" v-for="creative in folder.creatives" v-bind:key="creative.id">
           <div class="creative-image">
             <img class="creative-alt" alt="Logo" src="../assets/creative.png">
           </div>
@@ -29,12 +29,16 @@ import  { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Creatives',
   methods: {
-    ...mapActions(['fetchCreatives'])
+    ...mapActions(['fetchCreatives']),
+
+    goToCreative: function(creativeId) {
+      this.$router.push({ path: `/info/${creativeId}` })
+    }
   },
   computed: mapGetters(['getCreatives']),
   created() {
-    this.fetchCreatives();
-  }
+    this.fetchCreatives(this.id);
+  },
 }
 </script>
 
@@ -50,7 +54,7 @@ export default {
     justify-content: center;
   }
 
-  .creative {
+  .creative, .folder {
     color: white;
     margin: 30px 10px 10px 10px;
   }
@@ -68,5 +72,10 @@ export default {
 
   .creative-alt {
     margin: 25px 0 0 0;
+  }
+
+  .creative:hover {
+    opacity: 0.6;
+    cursor: pointer;
   }
 </style>

@@ -44,13 +44,44 @@ const state = {
     ],
     accountId: null,
     authToken: 'Basic ' + btoa(process.env.VUE_APP_CELTRA_APP_ID + ':' + process.env.VUE_APP_CELTRA_SECRET_KEY),
+    creativeInfo: {},
 };
 
 const getters = {
-    getCreatives: state => state.creatives
+    getCreatives: state => state.creatives,
+    getCreativeInfo: state => state.creativeInfo,
 };
 
 const actions = {
+    async fetchCreativeInfo({ commit }, creativeId) {
+        var config = {
+            headers: {
+                'Authorization': state.authToken,
+            },
+            params: {
+                'isArchived': '0',
+                'isEffectivelyArchived': '0',
+                'returnPartialUnits': '1',
+                'fields': [
+                    'id',
+                    'name',
+                    'clazz',
+                    'template',
+                    'schemaVersion',
+                    'builderCreativeVersion',
+                    'units',
+                    'files',
+                    'hasVideoContent',
+                    'customAttributes'
+                ].toString(),
+                'id.in': creativeId,
+            }
+        };
+        const creativeInfoResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/creatives", config);
+        console.log('CreativeInfo', creativeInfoResponse.data);
+        commit('setCreativeInfo', creativeInfoResponse.data);
+    },
+
     async fetchAccountId({ commit }) {
         const me = await axios.get(process.env.VUE_APP_CELTRA_URL + "/me", {
             headers: {
@@ -89,7 +120,7 @@ const actions = {
             params: {
                 'accountId': state.accountId,
                 'clazz': 'Template',
-                'fields': ['id', 'name'],
+                'fields': ['id', 'name'].toString(),
                 'in': []
             }
         };
@@ -147,6 +178,7 @@ const actions = {
 const mutations = {
     setCreatives: (state, creatives) => state.creatives = creatives,
     setAccountId: (state, id) => state.accountId = id,
+    setCreativeInfo: (state, creativeInfo) => state.creativeInfo = creativeInfo,
 };
 
 export default {
