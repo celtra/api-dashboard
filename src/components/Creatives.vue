@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="creative" v-for="folder in getCreatives" v-bind:key="folder.folderId">
+      <hr>
       <div class="folder-name">{{ folder.folderName }}</div>
       <hr>
       <div class="creative-list">
@@ -51,7 +52,7 @@ export default {
 
   .creative {
     color: white;
-    margin-top: 30px;
+    margin: 30px 10px 10px 10px;
   }
 
   .creative-image {
