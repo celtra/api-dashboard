@@ -45,11 +45,15 @@ const state = {
     accountId: null,
     authToken: 'Basic ' + btoa(process.env.VUE_APP_CELTRA_APP_ID + ':' + process.env.VUE_APP_CELTRA_SECRET_KEY),
     creativeInfo: {},
+    adProductJob: null,
+    folderId: null,
 };
 
 const getters = {
     getCreatives: state => state.creatives,
     getCreativeInfo: state => state.creativeInfo,
+    getAdProductJob: state => state.adProductJob,
+    getFolderId: state => state.folderId,
 };
 
 const actions = {
@@ -78,8 +82,8 @@ const actions = {
             }
         };
         const creativeInfoResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/creatives", config);
-        console.log('CreativeInfo', creativeInfoResponse.data);
-        commit('setCreativeInfo', creativeInfoResponse.data);
+        console.log('CreativeInfo1', creativeInfoResponse.data[0]);
+        commit('setCreativeInfo', creativeInfoResponse.data[0]);
     },
 
     async fetchAccountId({ commit }) {
@@ -172,6 +176,26 @@ const actions = {
         }
         console.log('MappedCreatives', mappedCreatives);
         commit('setCreatives', mappedCreatives);
+    },
+
+    async fetchAdProductJob({ commit }, body) {
+        const headers = {
+            'Authorization': state.authToken,
+            'Access-Control-Allow-Headers': '*',
+            'Accept': '*/*',
+            'Content-Type': 'application/json; charset=UTF-8',
+        }
+        const config = {
+            headers: headers
+        };
+        const adProductJob = await axios.post(process.env.VUE_APP_CELTRA_URL + "/adProductJobs", body, config);
+
+        console.log('adProductJob', adProductJob);
+        commit('adProductJob', adProductJob);
+    },
+
+    saveFolderId({ commit, dispatch }, folderId) {
+        commit('setFolderId', folderId);
     }
 };
 
@@ -179,6 +203,8 @@ const mutations = {
     setCreatives: (state, creatives) => state.creatives = creatives,
     setAccountId: (state, id) => state.accountId = id,
     setCreativeInfo: (state, creativeInfo) => state.creativeInfo = creativeInfo,
+    setAdProductJob: (state, adProductJob) => state.adProductJob = adProductJob,
+    setFolderId: (state, folderId) => state.folderId = folderId,
 };
 
 export default {

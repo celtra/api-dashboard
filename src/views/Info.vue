@@ -1,6 +1,6 @@
 <template>
   <div class="Info">
-    <h1>Creative with id {{ this.$route.params.id }}</h1>
+    <h1>Creative #{{ this.$route.params.id }}</h1>
     <CreativeInfo :id="this.$route.params.id" />
   </div>
 </template>

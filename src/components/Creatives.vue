@@ -5,7 +5,7 @@
       <div class="folder-name">{{ folder.folderName }}</div>
       <hr>
       <div class="creative-list">
-        <div class="creative"  v-on:click="goToCreative(creative.id)" v-for="creative in folder.creatives" v-bind:key="creative.id">
+        <div class="creative"  v-on:click="goToCreative(creative.id, creative.folderId)" v-for="creative in folder.creatives" v-bind:key="creative.id">
           <div class="creative-image">
             <img class="creative-alt" alt="Logo" src="../assets/creative.png">
           </div>
@@ -29,10 +29,14 @@ import  { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Creatives',
   methods: {
-    ...mapActions(['fetchCreatives']),
+    ...mapActions([
+      'fetchCreatives',
+      'saveFolderId'
+    ]),
 
-    goToCreative: function(creativeId) {
-      this.$router.push({ path: `/info/${creativeId}` })
+    goToCreative: function(creativeId, folderId) {
+      this.$store.dispatch('saveFolderId', folderId);
+      this.$router.push({ path: `/info/${creativeId}`, params: { folderId: folderId }})
     }
   },
   computed: mapGetters(['getCreatives']),
