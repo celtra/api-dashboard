@@ -50,8 +50,8 @@
 
 <script>
 import  { mapGetters, mapActions } from 'vuex';
-import InputField from '@/components/InputField.vue';
-import ChoiceField from '@/components/ChoiceField.vue';
+import InputField from '@/components/templateFields/InputField.vue';
+import ChoiceField from '@/components/templateFields/ChoiceField.vue';
 
 export default {
   name: 'CreativeInfo',
