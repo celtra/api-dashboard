@@ -1,5 +1,19 @@
 import axios from "axios";
 
+
+const API = {
+    me: "/me",
+    accounts: "/accounts",
+    creatives: "/creatives",
+    folders: "/folders",
+    adProductJobs: "/adProductJobs",
+}
+
+function API_URL(ENDPOINT) {
+    return process.env.VUE_APP_CELTRA_URL + ENDPOINT
+}
+
+
 const state = {
     creatives: [
         /*
@@ -45,7 +59,7 @@ const state = {
     accountId: null,
     authToken: 'Basic ' + btoa(process.env.VUE_APP_CELTRA_APP_ID + ':' + process.env.VUE_APP_CELTRA_SECRET_KEY),
     creativeInfo: {},
-    adProductJob: null,
+    adProductJobId: null,
     folderId: null,
 };
 
@@ -81,13 +95,13 @@ const actions = {
                 'id.in': creativeId,
             }
         };
-        const creativeInfoResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/creatives", config);
-        console.log('CreativeInfo1', creativeInfoResponse.data[0]);
+        const creativeInfoResponse = await axios.get(API_URL(API.creatives), config);
+        console.log('CreativeInfo', creativeInfoResponse.data[0]);
         commit('setCreativeInfo', creativeInfoResponse.data[0]);
     },
 
     async fetchAccountId({ commit }) {
-        const me = await axios.get(process.env.VUE_APP_CELTRA_URL + "/me", {
+        const me = await axios.get(API_URL(API.me), {
             headers: {
                 'Authorization': state.authToken,
             },
@@ -107,7 +121,7 @@ const actions = {
                 'fields': 'id'
             }
         };
-        const accountResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/accounts", config);
+        const accountResponse = await axios.get(API_URL(API.accounts), config);
         const accountId = accountResponse.data[0].id;
 
         console.log('AccountId', accountId);
@@ -115,8 +129,6 @@ const actions = {
     },
 
     async fetchFolders({ commit }) {
-        const URL = process.env.VUE_APP_CELTRA_URL + "/folders";
-
         var config = {
             headers: {
                 'Authorization': state.authToken,
@@ -128,7 +140,7 @@ const actions = {
                 'in': []
             }
         };
-        const response = await axios.get(URL, config);
+        const response = await axios.get(API_URL(API.folders), config);
 
         console.log('AccountId', response.data);
         commit('setAccountId', response.data.id);
@@ -150,7 +162,7 @@ const actions = {
                 'fields': ['id', 'name', 'clazz', 'folderId'].toString(),
             }
         };
-        const creativesResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/creatives", creativesConfig);
+        const creativesResponse = await axios.get(API_URL(API.creatives), creativesConfig);
 
         const folders = creativesResponse.data.map(c => c.folderId)
 
@@ -164,7 +176,7 @@ const actions = {
             }
         };
 
-        const foldersResponse = await axios.get(process.env.VUE_APP_CELTRA_URL + "/folders", foldersConfig);
+        const foldersResponse = await axios.get(API_URL(API.folders), foldersConfig);
 
         const mappedCreatives = [];
         for (var folder of foldersResponse.data) {
@@ -188,10 +200,10 @@ const actions = {
         const config = {
             headers: headers
         };
-        const adProductJob = await axios.post(process.env.VUE_APP_CELTRA_URL + "/adProductJobs", body, config);
+        const responseApProductJobs = await axios.post(API_URL(API.adProductJobs), body, config);
 
-        console.log('adProductJob', adProductJob);
-        commit('adProductJob', adProductJob);
+        console.log('adProductJob', responseApProductJobs);
+        commit('setAdProductJobId', responseApProductJobs.data.adProductJobId);
     },
 
     saveFolderId({ commit, dispatch }, folderId) {
@@ -203,7 +215,7 @@ const mutations = {
     setCreatives: (state, creatives) => state.creatives = creatives,
     setAccountId: (state, id) => state.accountId = id,
     setCreativeInfo: (state, creativeInfo) => state.creativeInfo = creativeInfo,
-    setAdProductJob: (state, adProductJob) => state.adProductJob = adProductJob,
+    setAdProductJobId: (state, adProductJobId) => state.adProductJobId = adProductJobId,
     setFolderId: (state, folderId) => state.folderId = folderId,
 };
 

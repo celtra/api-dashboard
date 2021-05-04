@@ -21,7 +21,7 @@
                         :variantLocalId="creativeInfo.variantLocalId"
                         :input="property.input"
                         :property="property.property"
-                        :value="JSON.stringify(property.value)" />
+                        :value="property.type == 'font' ? property.value.typefaceId : property.value" />
                     </div>
 
                     <div v-if="property.type == 'image'">

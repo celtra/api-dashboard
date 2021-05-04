@@ -1,10 +1,14 @@
 <template>
   <div>
       <div v-if="property == 'fontLocalId'">
-        <input type="text" v-model="fontValue" placeholder="Type"> Value: {{ fontValue }}
+        <input type="text" v-model="fontValue" placeholder="Type">
+        <br>
+        {{ fontValue }}
       </div>
       <div v-else>
-        <input type="text" v-model="stringValue" placeholder="Type"> Value: {{ stringValue }}
+        <input type="text" v-model="stringValue" placeholder="Type">
+        <br>
+        {{ stringValue }}
       </div>
   </div>
 </template>
