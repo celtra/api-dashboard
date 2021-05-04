@@ -1,24 +1,16 @@
 # api-dashboard
 
-## Project setup
+## Mock API app
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+Using existing Celtra's internal/external endpoints for creating new creatives from templates
 ```
 
-### Compiles and minifies for production
+### Config .env file
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+VUE_APP_CELTRA_APP_ID={{ api_id }}
+VUE_APP_CELTRA_SECRET_KEY={{ secret_key }}
+VUE_APP_CELTRA_URL={{ celtra_url }}
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Visit Mock API app [here](https://celtra-api-dashboard.herokuapp.com/).

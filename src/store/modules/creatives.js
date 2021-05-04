@@ -128,24 +128,6 @@ const actions = {
         commit('setAccountId', accountId);
     },
 
-    async fetchFolders({ commit }) {
-        var config = {
-            headers: {
-                'Authorization': state.authToken,
-            },
-            params: {
-                'accountId': state.accountId,
-                'clazz': 'Template',
-                'fields': ['id', 'name'].toString(),
-                'in': []
-            }
-        };
-        const response = await axios.get(API_URL(API.folders), config);
-
-        console.log('AccountId', response.data);
-        commit('setAccountId', response.data.id);
-    },
-
     async fetchCreatives({ commit, dispatch }) {
         if (state.accountId == null) {
             await dispatch('fetchAccountId');
