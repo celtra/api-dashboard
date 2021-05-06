@@ -15,52 +15,14 @@ function API_URL(ENDPOINT) {
 
 
 const state = {
-    creatives: [
-        /*
-        {
-            folderId: "23432szd",
-            folderName: "ThisIsFolder",
-            creatives: [
-                {
-                    id: 1,
-                    name: "Creative one",
-                    folderId: '23432szd',
-                    clazz: 'Test banner'
-                },
-                {
-                    id: 2,
-                    name: "Creative two",
-                    folderId: '23432szd',
-                    clazz: 'Test banner'
-                },
-                {
-                    id: 3,
-                    name: "Creative three",
-                    folderId: '23432szd',
-                    clazz: 'Test banner'
-                },
-            ]
-        },
-        {
-            folderId: "53rfds43",
-            folderName: "SecondFolder",
-            creatives: [
-                {
-                    id: 4,
-                    name: "CreativeFour",
-                    folderId: '53rfds43',
-                    clazz: 'Test banner'
-                },
-            ]
-        },
-        */
-
-    ],
+    creatives: [],
     accountId: null,
     authToken: 'Basic ' + btoa(process.env.VUE_APP_CELTRA_APP_ID + ':' + process.env.VUE_APP_CELTRA_SECRET_KEY),
     creativeInfo: {},
     adProductJobId: null,
     folderId: null,
+    destinationFolders: [],
+    destinationFolder: null,
 };
 
 const getters = {
@@ -68,6 +30,8 @@ const getters = {
     getCreativeInfo: state => state.creativeInfo,
     getAdProductJob: state => state.adProductJob,
     getFolderId: state => state.folderId,
+    getDestinationFolders: state => state.destinationFolders,
+    getDestinationFolder: state => state.destinationFolder
 };
 
 const actions = {
@@ -98,6 +62,45 @@ const actions = {
         const creativeInfoResponse = await axios.get(API_URL(API.creatives), config);
         console.log('CreativeInfo', creativeInfoResponse.data[0]);
         commit('setCreativeInfo', creativeInfoResponse.data[0]);
+    },
+
+    async fetchDestinationFolders({ commit, dispatch }, parentFolderId) {
+        console.log("parentId", parentFolderId)
+
+        if (state.accountId == null) {
+            await dispatch('fetchAccountId');
+        }
+
+        var params = {
+            'accountId': state.accountId,
+            'clazz': 'Campaign',
+            'fields': ['id', 'name'].toString(),
+        }
+
+        if (parentFolderId ) {
+            params = {
+                'parentFolderId': parentFolderId,
+                'accountId': state.accountId,
+                'clazz':  ['Batch', 'SubFolder'].toString(),
+                'fields': ['id', 'name'].toString(),
+                'isDeleted': 0,
+                'isArchived': 0,
+            }
+        }
+
+        console.log("params", params)
+
+        const config = {
+            headers: {
+                'Authorization': state.authToken,
+            },
+            params: params
+        };
+
+        const destinationFoldersResponse = await axios.get(API_URL(API.folders), config);
+
+        console.log('DestinationFolders', destinationFoldersResponse.data);
+        commit('setDestinationFolders', destinationFoldersResponse.data);
     },
 
     async fetchAccountId({ commit }) {
@@ -199,11 +202,13 @@ const mutations = {
     setCreativeInfo: (state, creativeInfo) => state.creativeInfo = creativeInfo,
     setAdProductJobId: (state, adProductJobId) => state.adProductJobId = adProductJobId,
     setFolderId: (state, folderId) => state.folderId = folderId,
+    setDestinationFolders: (state, destinationFolders) => state.destinationFolders = destinationFolders,
+    setDestinationFolder: (state, destinationFolder) => state.destinationFolder = destinationFolder,
 };
 
 export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 }
