@@ -108,7 +108,9 @@ export default {
         }
       }
       console.log(newTemplate)
-      this.fetchAdProductJob(newTemplate);
+      this.fetchAdProductJob(newTemplate).then(adProductJobId => {
+        this.$router.push({ path: `/status/${adProductJobId}`})
+      });
     },
 
     updateTemplateValue(objectLocalId, tagLocalId, variantLocalId, input, property, value) {
@@ -151,6 +153,7 @@ export default {
   computed: mapGetters([
     'getCreativeInfo',
     'getFolderId',
+    'getAdProductJob',
   ]),
 
   created() {

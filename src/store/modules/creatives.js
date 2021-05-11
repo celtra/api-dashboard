@@ -7,6 +7,7 @@ const API = {
     creatives: "/creatives",
     folders: "/folders",
     adProductJobs: "/adProductJobs",
+    adProductJob: "/adProductJob",
 }
 
 function API_URL(ENDPOINT) {
@@ -35,6 +36,18 @@ const getters = {
 };
 
 const actions = {
+    async checkAdProductJobStatus({ commit }, adProductJobId) {
+        var config = {
+            headers: {
+                'Authorization': state.authToken,
+            },
+        };
+        const statusResponse = await axios.get(`${API_URL(API.adProductJob)}/${adProductJobId}`, config);
+        console.log('AdProductJobStatus', statusResponse.data);
+
+        return statusResponse?.data?.status
+    },
+
     async fetchCreativeInfo({ commit }, creativeId) {
         var config = {
             headers: {
@@ -189,6 +202,8 @@ const actions = {
 
         console.log('adProductJob', responseApProductJobs);
         commit('setAdProductJobId', responseApProductJobs.data.adProductJobId);
+
+        return responseApProductJobs.data.adProductJobId
     },
 
     saveFolderId({ commit, dispatch }, folderId) {
