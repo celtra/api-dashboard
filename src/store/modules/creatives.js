@@ -24,6 +24,7 @@ const state = {
     folderId: null,
     destinationFolders: [],
     destinationFolder: null,
+    ownerId: null,
 };
 
 const getters = {
@@ -32,10 +33,31 @@ const getters = {
     getAdProductJob: state => state.adProductJob,
     getFolderId: state => state.folderId,
     getDestinationFolders: state => state.destinationFolders,
-    getDestinationFolder: state => state.destinationFolder
+    getDestinationFolder: state => state.destinationFolder,
+    getOwnerId: state => state.ownerId,
 };
 
 const actions = {
+    async fetchAdProductJobList({ commit, dispatch }) {
+        if (state.ownerId == null) {
+            await dispatch('fetchMe');
+        }
+
+
+        const config = {
+            headers: {
+                'Authorization': state.authToken,
+            },
+            params: {
+                'ownerId': state.ownerId,
+            }
+        };
+        const listResponse = await axios.get(API_URL(API.adProductJobs), config);
+        console.log(listResponse.data)
+
+        return listResponse.data
+    },
+
     async checkAdProductJobStatus({ commit }, adProductJobId) {
         var config = {
             headers: {
@@ -116,7 +138,7 @@ const actions = {
         commit('setDestinationFolders', destinationFoldersResponse.data);
     },
 
-    async fetchAccountId({ commit }) {
+    async fetchMe({ commit }) {
         const me = await axios.get(API_URL(API.me), {
             headers: {
                 'Authorization': state.authToken,
@@ -126,13 +148,22 @@ const actions = {
             }
         });
         const ownerId = me.data.id;
+        commit('setOwnerId', ownerId);
 
-        var config = {
+        return ownerId
+    },
+
+    async fetchAccountId({ commit, dispatch }) {
+        if (state.ownerId == null) {
+            await dispatch('fetchMe');
+        }
+
+        const config = {
             headers: {
                 'Authorization': state.authToken,
             },
             params: {
-                'userId': ownerId,
+                'userId': state.ownerId,
                 'identifier': 'test3',
                 'fields': 'id'
             }
@@ -219,6 +250,7 @@ const mutations = {
     setFolderId: (state, folderId) => state.folderId = folderId,
     setDestinationFolders: (state, destinationFolders) => state.destinationFolders = destinationFolders,
     setDestinationFolder: (state, destinationFolder) => state.destinationFolder = destinationFolder,
+    setOwnerId: (state, ownerId) => state.ownerId = ownerId,
 };
 
 export default {
